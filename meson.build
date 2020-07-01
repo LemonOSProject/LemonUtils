@@ -23,3 +23,6 @@ uname_src = [
 ]
 
 executable('cat.lef', cat_src, install : true)
+executable('echo.lef', echo_src, install : true)
+executable('rm.lef', rm_src, install : true)
+executable('ls.lef', ls_src, link_args : ['-llemon'], install : true)
