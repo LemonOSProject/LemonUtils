@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
+#include <dirent.h>
 #include <string>
 
 int help = 0;
@@ -32,7 +33,7 @@ void DisplayEntry(const char* path, struct stat& st){
     puts(entryString.c_str());
 }
 
-void DisplayPath(const char* path){
+void DisplayPath(const char* path, bool displayPath = false){
     if(listDirectories){
         struct stat sResult;
         stat(path, &sResult);
@@ -49,30 +50,31 @@ void DisplayPath(const char* path){
             DisplayEntry(path, sResult);
             return;
         } else {
-            printf("%s:\n", path);
+            if(displayPath)
+                printf("%s:\n", path);
 
-            int dirfd = open(path, O_DIRECTORY);
-            if(dirfd <= 0){
-                fprintf(stderr, "ls: %s: %s", path, strerror(errno));
-                return;
-            }
+            struct dirent** entries;
+            int entryCount = scandir(path, &entries, static_cast<int(*)(const dirent*)>([](const dirent* d) -> int { return strcmp(d->d_name, "..") && strcmp(d->d_name, "."); }), static_cast<int(*)(const dirent**, const dirent**)>([](const dirent** a, const dirent**b) { return strcmp((*a)->d_name, (*b)->d_name); }));
 
-            int index = 0;
-            lemon_dirent_t dirent;
-            while(lemon_readdir(dirfd, index++, &dirent)){
+            int i = 0;
+            while(i < entryCount){
+                struct dirent* dirent = entries[i++];
+
+                if(!strlen(dirent->d_name)) continue;
+
                 if(recursive){
                     std::string dirPath = path;
                     dirPath.append("/");
-                    dirPath.append(dirent.name);
+                    dirPath.append(dirent->d_name);
 
-                    DisplayPath(dirPath.c_str());
+                    DisplayPath(dirPath.c_str(), true);
                 } else {
                     std::string dirPath = path;
                     dirPath.append("/");
-                    dirPath.append(dirent.name);
+                    dirPath.append(dirent->d_name);
                     struct stat sResult;
                     stat(dirPath.c_str(), &sResult);
-                    DisplayEntry(dirent.name, sResult);
+                    DisplayEntry(dirent->d_name, sResult);
                 }
             }
         }
@@ -119,9 +121,9 @@ int main(int argc, char** argv){
     }
 
     if(optind >= argc){
-        DisplayPath(".");
+        DisplayPath(".", false);
     } else for(; optind < argc; optind++){
-        DisplayPath(argv[optind]);
+        DisplayPath(argv[optind], true);
     }
 
     return 0;
