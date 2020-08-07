@@ -22,7 +22,18 @@ uname_src = [
     'utils/uname.cpp',
 ]
 
+hexdump_src = [
+    'utils/hexdump.cpp',
+]
+
+ps_src = [
+    'utils/ps.cpp',
+]
+
 executable('cat.lef', cat_src, install : true)
 executable('echo.lef', echo_src, install : true)
 executable('rm.lef', rm_src, install : true)
-executable('ls.lef', ls_src, link_args : ['-llemon'], install : true)
+executable('ls.lef', ls_src, install : true)
+executable('uname.lef', uname_src, install : true)
+executable('hexdump.lef', hexdump_src, install : true)
+executable('ps.lef', ps_src, link_args : [ '-llemon' ], install : true)

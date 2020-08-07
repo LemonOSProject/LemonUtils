@@ -24,7 +24,9 @@ void DisplayEntry(const char* path, struct stat& st){
         entryString += "\e[38;5;208m"; // Orange foregrouud
     } else if(S_ISCHR(st.st_mode)){
         entryString += "\e[38;5;38m"; // Cyan foreground
-    } else {
+    } else if(S_ISBLK(st.st_mode)){
+        entryString += "\e[38;5;33m"; // Blue foreground
+    }  else {
         entryString += "\e[38;5;124m"; // Red foregrouud
     }
 
