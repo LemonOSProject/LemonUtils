@@ -7,6 +7,7 @@
 #include <string.h>
 #include <errno.h>
 #include <string>
+#include <unistd.h>
 
 int help = 0;
 int recursive = 0;

@@ -38,32 +38,35 @@ int main(int argc, char** argv){
 
         if(!f){
             fprintf(stderr, "Failed to open %s for reading: %s", argv[i], strerror(errno));
+            return 1;
         }
 
+        setvbuf(f, nullptr, _IONBF, 0);
         fseek(f, offset, SEEK_SET);
 
-        unsigned char buf[17];
-        buf[16] = 0; // Null terminate
+        unsigned char buf[512];
 
         size_t len;
-        while((len = fread(buf, 1, 16, f)) && offset < limit){
-            printf("%08lx", offset);
-            for(size_t i = 0; i < 16; i++){
-                printf(" %02x", buf[i]);
+        while((len = fread(buf, 1, (((limit - offset) < 512) ? (limit - offset) : 512), f)) && offset < limit){
+            for(unsigned j = 0; j < (len + 15) / 16; j++){
+                printf("%08lx", offset);
+                for(size_t i = 0; i < 16; i++){
+                    printf(" %02x", buf[j * 16 + i]);
+                }
+
+                printf(" | ");
+
+                for(size_t i = 0; i < 16; i++){
+                    if(isprint(buf[j * 16 + i]))
+                        printf("%c", buf[j * 16 + i]);
+                    else
+                        printf(".");
+                }
+
+                printf("\n");
+
+                offset += 16;
             }
-
-            printf(" | ");
-
-            for(size_t i = 0; i < 16; i++){
-                if(isprint(buf[i]))
-                    printf("%c", buf[i]);
-                else
-                    printf(".");
-            }
-
-            printf("\n");
-
-            offset += len;
         }
     }
 
