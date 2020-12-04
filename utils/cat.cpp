@@ -19,7 +19,7 @@ int main(int argc, char** argv){
             FILE* f = fopen(argv[i], "r");
 
             if(!f){
-                fprintf(stderr, "%s: %s: %s\n", argv[i], strerror(errno));
+                fprintf(stderr, "%s: %s: %s\n", argv[0], argv[i], strerror(errno));
                 continue;
             }
 

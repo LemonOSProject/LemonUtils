@@ -35,7 +35,7 @@ int main(int argc, char** argv){
     if(help){
         printf("Usage: %s [options] [file] [file2] ...\n\
             --help            Show this help\n\
-            -R, --recursive   Recursively delete files\n");
+            -R, --recursive   Recursively delete files\n", argv[0]);
         return 1;
     }
 

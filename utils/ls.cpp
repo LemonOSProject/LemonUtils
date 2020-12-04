@@ -118,7 +118,7 @@ int main(int argc, char** argv){
             --help            Show this help\n\
             -i, --inode       Show file inode numbers\n\
             -R, --recursive   Recursively show directory contents\n\
-            -s, --size        Show file sizes\n");
+            -s, --size        Show file sizes\n", argv[0]);
         return 1;
     }
 
