@@ -2,7 +2,6 @@
 #include <getopt.h>
 #include <sys/stat.h>
 #include <vector>
-#include <lemon/filesystem.h>
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
