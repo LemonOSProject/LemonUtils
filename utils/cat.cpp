@@ -29,8 +29,11 @@ int main(int argc, char** argv){
 
     for(FILE*& f : files){
         while(char c = fgetc(f)){
-            if(feof(f)){
-                break;
+            if(int e = ferror(f); e){
+                printf("%s: %s", argv[0], strerror(errno));
+                return errno;
+            } else if(feof(f) || c == EOF){
+                return 0;
             }
 
             fputc(c, stdout);
