@@ -18,20 +18,24 @@ void DisplayEntry(const char* path, struct stat& st){
     std::string entryString = "";
 
     if(S_ISDIR(st.st_mode)){
-        entryString += "\e[38;5;163m"; // Magneta foregrouud
+        entryString += "\e[95m"; // Magneta foregrouud
     } else if(S_ISLNK(st.st_mode)){
-        entryString += "\e[38;5;208m"; // Orange foregrouud
+        entryString += "\e[93m"; // Orange foregrouud
     } else if(S_ISCHR(st.st_mode)){
-        entryString += "\e[38;5;38m"; // Cyan foreground
+        entryString += "\e[96m"; // Cyan foreground
     } else if(S_ISBLK(st.st_mode)){
-        entryString += "\e[38;5;33m"; // Blue foreground
+        entryString += "\e[94m"; // Blue foreground
     }  else {
-        entryString += "\e[38;5;124m"; // Red foregrouud
+        entryString += "\e[31m"; // Red foregrouud
     }
 
     entryString += path;
 
-    puts(entryString.c_str());
+    if(size){
+        printf("\e[0m%08lu K  %s\n", st.st_size / 1024, entryString.c_str());
+    } else {
+        printf("%s\n", entryString.c_str());
+    }
 }
 
 void DisplayPath(const char* path, bool displayPath = false){
