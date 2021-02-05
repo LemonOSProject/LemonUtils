@@ -44,7 +44,7 @@ int main(int argc, char** argv){
     } else for(; optind < argc; optind++){
         int ret = unlink(argv[optind]);
         if(ret){
-            fprintf(stderr, "%s: '%s': %s", argv[0], argv[1], strerror(errno));
+            fprintf(stderr, "%s: '%s': %s", argv[0], argv[optind], strerror(errno));
         }
     }
 
