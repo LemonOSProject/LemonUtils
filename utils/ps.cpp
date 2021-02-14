@@ -10,7 +10,7 @@ int main(int argc, char** argv){
 
     printf("Process:        PID:   Uptime:\n\n");
     for(lemon_process_info_t proc : procs){
-        printf("%14s  %4lu  %lus\n", proc.name, proc.pid, proc.runningTime);
+        printf("%14s  %4d  %lus\n", proc.name, proc.pid, proc.runningTime);
     }
 
     return 0;
